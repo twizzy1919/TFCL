@@ -1,0 +1,18 @@
+{
+    "id": 123985356,
+    "name": "twizzy ship",
+    "author": "twizzymik",
+    "creators": ["twizzymik"],
+    "verifier": "twizzymik",
+    "verification": "https://youtu.be/Mb-3QwLjcSQ",
+    "percentToQualify": 100,
+    "password": "N/A",
+    "records": [
+        {
+            "user": "parkerplaysgd",
+            "link": "https://youtu.be/fsI0bAbd6Nc?si=ro25Bo3j4pnEtwyb",
+            "percent": 100,
+            "hz": 240
+        }
+    ]
+}

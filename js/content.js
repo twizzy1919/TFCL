@@ -46,6 +46,16 @@ export async function fetchEditors() {
     }
 }
 
+export async function fetchMembers() {
+    try {
+        const membersResults = await fetch(`${dir}/_members.json`);
+        const members = await membersResults.json();
+        return members;
+    } catch {
+        return null;
+    }
+}
+
 export async function fetchLeaderboard() {
     const list = await fetchList();
 

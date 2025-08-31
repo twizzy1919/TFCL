@@ -10,6 +10,15 @@
     padding-right: 2rem;
 }
 
+.list-container {
+    background-color: #252429;
+}
+
+.meta-container {
+    background-color: #252429;
+    padding-left: 2rem;
+}
+
 .page-list .list {
     table-layout: auto;
 }
@@ -21,11 +30,12 @@
     width: 100%;
 }
 .page-list .list .level button {
-    background-color: var(--color-background);
+    background-color: #302e35;
     color: var(--color-on-background);
     border: none;
     border-radius: 0.5rem;
-    padding: 1rem;
+    padding: 0.75rem;
+    margin: 0.25rem;
     text-align: start;
     word-break: normal;
     overflow-wrap: anywhere;
@@ -72,6 +82,14 @@
     align-items: center;
     gap: 1rem;
 }
+
+.page-list .level-container .level .records {
+    font-size: 1.5rem;
+    padding: 1rem 0;
+}
+.page-list .level-container .level .records tr td {
+    padding: 1rem 1.5rem;
+}
 .page-list .level-container .level .records {
     table-layout: fixed;
 }
@@ -112,8 +130,11 @@
 }
 .page-list .meta .editors {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     gap: 0.75rem;
+    align-items: flex-start;
+    margin-top: -0.5rem;
 }
 .page-list .meta .editors li {
     display: flex;
@@ -125,4 +146,17 @@
 }
 .page-list .meta .editors li a:hover {
     text-decoration: underline;
+}
+
+#member-box {
+    background-color: #313035;
+    padding: 0.7rem;
+    border-radius: 0.5rem;
+    width: auto;
+    display: flex;
+    transition: background-color 0.3s;
+}
+
+#member-box:hover {
+    background-color: #333238;
 }

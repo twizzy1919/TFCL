@@ -1,6 +1,10 @@
 .page-leaderboard-container {
     display: block;
 }
+.player-container {
+    background-color: #252429;
+    padding: 2rem;
+}
 .page-leaderboard {
     height: 100%;
     display: grid;

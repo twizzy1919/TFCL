@@ -1,7 +1,7 @@
 import { store } from "../main.js";
 import { embed } from "../util.js";
 import { score } from "../score.js";
-import { fetchEditors, fetchMembers, fetchList } from "../content.js";
+import { fetchEditors, fetchList } from "../content.js";
 
 import Spinner from "../components/Spinner.js";
 import LevelAuthors from "../components/List/LevelAuthors.js";
@@ -12,7 +12,6 @@ const roleIconMap = {
     helper: "user-shield",
     dev: "code",
     trial: "user-lock",
-    member: "member",
 };
 
 export default {
@@ -56,19 +55,23 @@ export default {
                             <p>{{ level.password || 'Free to Copy' }}</p>
                         </li>
                     </ul>
-                    <h2><u>Records</h2>
+                    <h2>Records</h2>
+                    <p v-if="selected + 1 <= 75"><strong>{{ level.percentToQualify }}%</strong> or better to qualify</p>
+                    <p v-else-if="selected +1 <= 150"><strong>100%</strong> or better to qualify</p>
+                    <p v-else>This level does not accept new records.</p>
                     <table class="records">
                         <tr v-for="record in level.records" class="record">
+                            <td class="percent">
+                                <p>{{ record.percent }}%</p>
+                            </td>
                             <td class="user">
-                                <a :href="record.link" target="_blank" class="type-label-lg">• {{ record.user }}</a>
+                                <a :href="record.link" target="_blank" class="type-label-lg">{{ record.user }}</a>
                             </td>
                             <td class="mobile">
                                 <img v-if="record.mobile" src="/assets/phone-landscape-dark.svg" alt="Mobile">
                             </td>
-                            <td class="yt">
-                                <a :href="record.link" target="_blank">
-                                    <img src="/assets/youtube.svg" alt="YouTube" style="height:1.5rem;">
-                                </a>
+                            <td class="hz">
+                                <p>{{ record.hz }}Hz</p>
                             </td>
                         </tr>
                     </table>
@@ -82,38 +85,43 @@ export default {
                     <div class="errors" v-show="errors.length > 0">
                         <p class="error" v-for="error of errors">{{ error }}</p>
                     </div>
+                    <div class="og">
+                        <p class="type-label-md">Website layout made by <a href="https://tsl.pages.dev/" target="_blank">TheShittyList</a></p>
+                    </div>
                     <template v-if="editors">
-                        <h3>List Staff</h3>
+                        <h3>List Editors</h3>
                         <ol class="editors">
-                            <li v-for="editor in editors" id="member-box">
+                            <li v-for="editor in editors">
                                 <img :src="\`/assets/\${roleIconMap[editor.role]}-dark.svg\`" :alt="editor.role">
                                 <a v-if="editor.link" class="type-label-lg link" target="_blank" :href="editor.link">{{ editor.name }}</a>
                                 <p v-else>{{ editor.name }}</p>
                             </li>
                         </ol>
                     </template>
-                    <template v-if="members">
-                        <h3>Members</h3>
-                        <ol class="editors">
-                            <li v-for="member in members" id="member-box">
-                                <img :src="\`/assets/\${roleIconMap[member.role]}-dark.svg\`" :alt="member.role">
-                                <a v-if="member.link" class="type-label-lg link" target="_blank" :href="member.link">{{ member.name }}</a>
-                                <p v-else>{{ member.name }}</p>
-                            </li>
-                        </ol>
-                    </template>
-                    <h3>Level Submission Requirements</h3>
+                    <h3>Submission Requirements</h3>
                     <p>
-                        New levels cannot be added to the list unless every level on the list has at least one victor.
+                        Achieved the record without using hacks (however, FPS bypass is allowed, up to 360fps)
                     </p>
                     <p>
-                        Levels must have good gameplay and proper decoration. If undecorated, they must look clean. Low-effort levels will not be accepted, so only submit levels which reach our standards.
+                        Achieved the record on the level that is listed on the site - please check the level ID before you submit a record
                     </p>
                     <p>
-                        Levels must be play-tested and confirmed to be balanced.
+                        Have either source audio or clicks/taps in the video. Edited audio only does not count
                     </p>
                     <p>
-                        Levels cannot be buffed after submission.
+                        The recording must have a previous attempt and entire death animation shown before the completion, unless the completion is on the first attempt. Everyplay records are exempt from this
+                    </p>
+                    <p>
+                        The recording must also show the player hit the endwall, or the completion will be invalidated.
+                    </p>
+                    <p>
+                        Do not use secret routes or bug routes
+                    </p>
+                    <p>
+                        Do not use easy modes, only a record of the unmodified level qualifies
+                    </p>
+                    <p>
+                        Once a level falls onto the Legacy List, we accept records for it for 24 hours after it falls off, then afterwards we never accept records for said level
                     </p>
                 </div>
             </div>
@@ -122,7 +130,6 @@ export default {
     data: () => ({
         list: [],
         editors: [],
-        members: [],
         loading: true,
         selected: 0,
         errors: [],
@@ -149,7 +156,6 @@ export default {
         // Hide loading spinner
         this.list = await fetchList();
         this.editors = await fetchEditors();
-        this.members = await fetchMembers();
 
         // Error handling
         if (!this.list) {
